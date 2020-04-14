@@ -1,0 +1,79 @@
+components:
+    examples: {}
+    headers: {}
+    parameters: {}
+    requestBodies: {}
+    responses: {}
+    schemas:
+        MerchantOutput:
+            properties:
+                id:
+                    type: string
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+                drveUid:
+                    type: string
+                shopifyDomain:
+                    type: string
+                testMode:
+                    type: boolean
+            required:
+                - id
+                - createdAt
+                - updatedAt
+                - drveUid
+                - shopifyDomain
+                - testMode
+            type: object
+            additionalProperties: true
+    securitySchemes:
+        api_key:
+            type: apiKey
+            name: access_token
+            in: query
+        tsoa_auth:
+            type: oauth2
+            flows:
+                implicit:
+                    authorizationUrl: 'http://swagger.io/api/oauth/dialog'
+                    scopes:
+                        'write:pets': 'modify things'
+                        'read:pets': 'read things'
+info:
+    title: functions
+openapi: 3.0.0
+paths:
+    /Merchants:
+        get:
+            operationId: GetMerchants
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                items:
+                                    $ref: '#/components/schemas/MerchantOutput'
+                                type: array
+                    description: Ok
+            security: []
+            parameters: []
+    /MerchantsCreate:
+        get:
+            operationId: CreateMerchants
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                additionalProperties: true
+                                type: object
+                    description: Ok
+            security: []
+            parameters: []
+servers:
+    -
+        url: 'https://localhost:3000/v1'
