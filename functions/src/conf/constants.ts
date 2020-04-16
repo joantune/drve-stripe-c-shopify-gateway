@@ -17,7 +17,8 @@ export const constants = {
   ],
   defaultRequestHost: functions.config().default.req_host,
   functionLocation: 'us-central1',
-  jwtSecret: process.env.JWT_SECRET || "asdkjlas jlkjkalsdjkljk lsjklsdaj l!@#ASD askjhd ASD k;SDVAFBCVNMS"
+  jwtSecret: process.env.JWT_SECRET || "asdkjlas jlkjkalsdjkljk lsjklsdaj l!@#ASD askjhd ASD k;SDVAFBCVNMS",
+  production: process.env.PRODUCTION || false
 };
 
 interface apiCredentials {

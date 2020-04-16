@@ -77,6 +77,9 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
     status,
     //TODO add stacktrace if in development mode
   };
+  if(constants.production == false) {
+    body.stack = err.stack || undefined;
+  }
   for(let header of err.headers || []) {
     res.setHeader(header[0], header[1]);
   }

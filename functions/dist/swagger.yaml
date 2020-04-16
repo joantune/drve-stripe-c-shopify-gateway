@@ -12,6 +12,109 @@ components:
                 - Inactive
                 - Stripe_inactive
             type: string
+        Partial_MerchantOutputInstance_:
+            properties:
+                chargeWebhookUrl:
+                    type: string
+                    default: ""
+                commissionPercentage:
+                    type: number
+                    format: double
+                    default: 0
+                connectedAccountWebhookUrl:
+                    type: string
+                    default: ""
+                createdAt:
+                    type: string
+                    format: date-time
+                    default: '2020-04-16T10:05:46.170Z'
+                drveUid:
+                    type: string
+                    default: ""
+                enabled:
+                    type: boolean
+                    default: false
+                gatewayAccountId:
+                    type: string
+                    default: ""
+                gatewayCredentials:
+                    type: string
+                    default: ""
+                gatewayURL:
+                    type: string
+                    default: ""
+                id:
+                    type: string
+                    default: ""
+                name:
+                    type: string
+                    default: ""
+                shopifyDomain:
+                    type: string
+                    default: ""
+                status:
+                    $ref: '#/components/schemas/Status'
+                stripeAcctId:
+                    type: string
+                    default: ""
+                stripeOnConnectionRedirectURL:
+                    type: string
+                    default: ""
+                stripeURLToConnectAccount:
+                    type: string
+                    default: ""
+                testMode:
+                    type: boolean
+                    default: true
+                updatedAt:
+                    type: string
+                    format: date-time
+                    default: '2020-04-16T10:05:46.172Z'
+            type: object
+            description: 'Make all properties in T optional'
+        Partial_MerchantOutput_:
+            properties:
+                status:
+                    $ref: '#/components/schemas/Status'
+                gatewayURL:
+                    type: string
+                gatewayAccountId:
+                    type: string
+                gatewayCredentials:
+                    type: string
+                stripeAcctId:
+                    type: string
+                stripeURLToConnectAccount:
+                    type: string
+                testMode:
+                    type: boolean
+                drveUid:
+                    type: string
+                shopifyDomain:
+                    type: string
+                commissionPercentage:
+                    type: number
+                    format: double
+                enabled:
+                    type: boolean
+                name:
+                    type: string
+                chargeWebhookUrl:
+                    type: string
+                connectedAccountWebhookUrl:
+                    type: string
+                stripeOnConnectionRedirectURL:
+                    type: string
+                id:
+                    type: string
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+            type: object
+            description: 'Make all properties in T optional'
         MerchantOutput:
             properties:
                 drveUid:
@@ -121,7 +224,7 @@ paths:
                         application/json:
                             schema:
                                 items:
-                                    $ref: '#/components/schemas/MerchantOutput'
+                                    $ref: '#/components/schemas/Partial_MerchantOutputInstance_'
                                 type: array
                     description: Ok
             security:
@@ -155,7 +258,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/MerchantOutput'
+                                $ref: '#/components/schemas/Partial_MerchantOutput_'
                     description: Ok
             security:
                 -

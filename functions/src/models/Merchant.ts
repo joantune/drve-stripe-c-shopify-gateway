@@ -2,6 +2,7 @@ import {Collection, IEntity, ISubCollection, SubCollection} from "fireorm";
 import {AbstractDatedEntity, AbstractDatedEntityImp} from "./AbstractDatedEntity";
 import Stripe = require("stripe");
 import {getRepository} from "../conf/database";
+import * as _ from 'lodash';
 
 // import * as uuid from 'uuid';
 
@@ -45,6 +46,33 @@ export interface MerchantOutput extends MerchantInput,IEntity, AbstractDatedEnti
 
 }
 
+export class MerchantOutputInstance implements MerchantOutput {
+  chargeWebhookUrl: string = "";
+  commissionPercentage: number = 0;
+  connectedAccountWebhookUrl: string = "";
+  createdAt: Date = new Date();
+  drveUid: string = "";
+  enabled: boolean = false;
+  gatewayAccountId: string = "";
+  gatewayCredentials: string = "";
+  gatewayURL: string = "";
+  id: string = "";
+  name: string = "";
+  shopifyDomain: string = "";
+  status: Status  =Status.Stripe_waiting;
+  stripeAcctId: string = "";
+  stripeOnConnectionRedirectURL: string = "";
+  stripeURLToConnectAccount: string = "";
+  testMode: boolean = true;
+  updatedAt: Date = new Date();
+
+
+  constructor(init?: Partial<MerchantOutput>) {
+    Object.assign(this,init);
+  }
+
+}
+
 export interface Merchant extends MerchantOutput {
   // stripeCredentials?: Stripe.oauth.IOAuthToken;
 }
@@ -73,6 +101,8 @@ export class StatusMerchantInstance implements IEntity,  StatusMerchant {
   id!: string;
 
 }
+
+const merchantOutputKeys = Object.keys(new MerchantOutputInstance());
 
 @Collection()
 export class MerchantInstance extends AbstractDatedEntityImp implements Merchant {
@@ -146,10 +176,14 @@ export class MerchantInstance extends AbstractDatedEntityImp implements Merchant
     instance.miscInfo = miscInfo;
     instance.status = status;
 
+    this.latestStatus = Object.assign({},instance);
     await this.statuses.create(instance);
-    this.latestStatus = instance;
 
 
+  }
+
+  asOutput(): Partial<MerchantOutput> {
+    return _.pick(this, merchantOutputKeys);
   }
 
 }
@@ -160,19 +194,20 @@ export class MerchantService {
     return getRepository(MerchantInstance);
   }
 
-  public static newInstance(testMode: boolean, init: MerchantInput) {
-    const instance = new MerchantInstance();
+  private static async newInstance(testMode: boolean, init: MerchantInput): Promise<MerchantInstance> {
+    let instance = new MerchantInstance();
     const enabledValue = init.enabled
     delete init.enabled;
     Object.assign(instance, init);
     instance.testMode = testMode;
     instance._enabled = enabledValue;
+    instance = await MerchantService.getRepository().create(instance);
     //at the beginning - Stripe can't be active
-    instance.addStatus(Status.Stripe_waiting, AuthorativeEntity.Stripe, "Merchant initial status" );
+    instance.addStatus(Status.Stripe_waiting, AuthorativeEntity.Stripe, "Merchant initial status");
     return instance;
   }
-  public static create(testMode: boolean, init: MerchantInput): Promise<MerchantInstance> {
-    const instance = MerchantService.newInstance(testMode, init);
-    return MerchantService.getRepository().create(instance);
+  static async create(testMode: boolean, init: MerchantInput): Promise<MerchantInstance> {
+    const instance = await MerchantService.newInstance(testMode, init);
+    return MerchantService.getRepository().update(instance);
   }
 }

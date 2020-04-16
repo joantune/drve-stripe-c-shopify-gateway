@@ -17,6 +17,16 @@ const models: TsoaRoute.Models = {
         "enums": ["Stripe_waiting", "Active", "Inactive", "Stripe_inactive"],
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Partial_MerchantOutputInstance_": {
+        "dataType": "refAlias",
+        "type": { "dataType": "nestedObjectLiteral", "nestedProperties": { "chargeWebhookUrl": { "dataType": "string", "default": "" }, "commissionPercentage": { "dataType": "double", "default": 0 }, "connectedAccountWebhookUrl": { "dataType": "string", "default": "" }, "createdAt": { "dataType": "datetime", "default": "2020-04-16T10:05:48.125Z" }, "drveUid": { "dataType": "string", "default": "" }, "enabled": { "dataType": "boolean", "default": false }, "gatewayAccountId": { "dataType": "string", "default": "" }, "gatewayCredentials": { "dataType": "string", "default": "" }, "gatewayURL": { "dataType": "string", "default": "" }, "id": { "dataType": "string", "default": "" }, "name": { "dataType": "string", "default": "" }, "shopifyDomain": { "dataType": "string", "default": "" }, "status": { "ref": "Status" }, "stripeAcctId": { "dataType": "string", "default": "" }, "stripeOnConnectionRedirectURL": { "dataType": "string", "default": "" }, "stripeURLToConnectAccount": { "dataType": "string", "default": "" }, "testMode": { "dataType": "boolean", "default": true }, "updatedAt": { "dataType": "datetime", "default": "2020-04-16T10:05:48.127Z" } }, "validators": {} },
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Partial_MerchantOutput_": {
+        "dataType": "refAlias",
+        "type": { "dataType": "nestedObjectLiteral", "nestedProperties": { "status": { "ref": "Status" }, "gatewayURL": { "dataType": "string" }, "gatewayAccountId": { "dataType": "string" }, "gatewayCredentials": { "dataType": "string" }, "stripeAcctId": { "dataType": "string" }, "stripeURLToConnectAccount": { "dataType": "string" }, "testMode": { "dataType": "boolean" }, "drveUid": { "dataType": "string" }, "shopifyDomain": { "dataType": "string" }, "commissionPercentage": { "dataType": "double" }, "enabled": { "dataType": "boolean" }, "name": { "dataType": "string" }, "chargeWebhookUrl": { "dataType": "string" }, "connectedAccountWebhookUrl": { "dataType": "string" }, "stripeOnConnectionRedirectURL": { "dataType": "string" }, "id": { "dataType": "string" }, "createdAt": { "dataType": "datetime" }, "updatedAt": { "dataType": "datetime" } }, "validators": {} },
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "MerchantOutput": {
         "dataType": "refObject",
         "properties": {
@@ -71,6 +81,7 @@ export function RegisterRoutes(app: express.Express) {
         authenticateMiddleware([{ "api_key": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
             };
 
             // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -93,6 +104,7 @@ export function RegisterRoutes(app: express.Express) {
         authenticateMiddleware([{ "api_key": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
                 drveUid: { "in": "path", "name": "drveUid", "required": true, "dataType": "string" },
             };
 
