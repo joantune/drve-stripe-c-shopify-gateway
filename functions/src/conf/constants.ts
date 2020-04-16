@@ -20,6 +20,40 @@ export const constants = {
   jwtSecret: process.env.JWT_SECRET || "asdkjlas jlkjkalsdjkljk lsjklsdaj l!@#ASD askjhd ASD k;SDVAFBCVNMS"
 };
 
+interface apiCredentials {
+  apiKey: string,
+  apiSecret: string
+}
+
+
+interface credentialsInterface {
+  live: apiCredentials,
+  testing: apiCredentials
+}
+
+
+const credentials : credentialsInterface= {
+  live:  {
+    apiKey: "129k=-asdmk123-asd2-asdancxcxv",
+    apiSecret: "lalk2109asdASDJFK@#"
+  },
+  testing: {
+    apiKey: "testing",
+    apiSecret: "apiSecret"
+  }
+}
+
+export const credentialsMatch = function(apiKey: string, apiSecret: string): Array<boolean> {
+  if(credentials.live.apiKey == apiKey && credentials.live.apiSecret == apiSecret) {
+    return [true, false];
+  }
+  if(credentials.testing.apiKey == apiKey && credentials.testing.apiSecret == apiSecret) {
+    return [true, true];
+  }
+  return [false, false];
+
+}
+
 
 /**
  * return an empty string if no custom port is defined - or the :<port> which is

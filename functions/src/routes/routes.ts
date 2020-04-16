@@ -6,20 +6,53 @@ import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute } 
 import { MerchantsController } from './../controllers/MerchantsController';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { MerchantsCreateController } from './../controllers/MerchantsController';
+import { expressAuthentication } from './../auth/authentication';
 import * as express from 'express';
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
+    "Status": {
+        "dataType": "refEnum",
+        "enums": ["Stripe_waiting", "Active", "Inactive", "Stripe_inactive"],
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "MerchantOutput": {
         "dataType": "refObject",
         "properties": {
+            "drveUid": { "dataType": "string", "required": true },
+            "shopifyDomain": { "dataType": "string", "required": true },
+            "commissionPercentage": { "dataType": "double", "required": true },
+            "enabled": { "dataType": "boolean", "required": true },
+            "name": { "dataType": "string", "required": true },
+            "chargeWebhookUrl": { "dataType": "string", "required": true },
+            "connectedAccountWebhookUrl": { "dataType": "string", "required": true },
+            "stripeOnConnectionRedirectURL": { "dataType": "string", "required": true },
             "id": { "dataType": "string", "required": true },
             "createdAt": { "dataType": "datetime", "required": true },
             "updatedAt": { "dataType": "datetime", "required": true },
+            "status": { "ref": "Status", "required": true },
+            "gatewayURL": { "dataType": "string", "required": true },
+            "gatewayAccountId": { "dataType": "string", "required": true },
+            "gatewayCredentials": { "dataType": "string", "required": true },
+            "stripeAcctId": { "dataType": "string", "required": true },
+            "stripeURLToConnectAccount": { "dataType": "string", "required": true },
+            "testMode": { "dataType": "boolean", "required": true },
+        },
+        "additionalProperties": true,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "MerchantInput": {
+        "dataType": "refObject",
+        "properties": {
             "drveUid": { "dataType": "string", "required": true },
             "shopifyDomain": { "dataType": "string", "required": true },
-            "testMode": { "dataType": "boolean", "required": true },
+            "commissionPercentage": { "dataType": "double", "required": true },
+            "enabled": { "dataType": "boolean", "required": true },
+            "name": { "dataType": "string", "required": true },
+            "chargeWebhookUrl": { "dataType": "string", "required": true },
+            "connectedAccountWebhookUrl": { "dataType": "string", "required": true },
+            "stripeOnConnectionRedirectURL": { "dataType": "string", "required": true },
         },
         "additionalProperties": true,
     },
@@ -34,7 +67,8 @@ export function RegisterRoutes(app: express.Express) {
     //  NOTE: If you do not see routes for all of your controllers in this file, then you might not have informed tsoa of where to look
     //      Please look into the "controllerPathGlobs" config option described in the readme: https://github.com/lukeautry/tsoa
     // ###########################################################################################################
-    app.get('/v1/Merchants',
+    app.get('/v1/merchants',
+        authenticateMiddleware([{ "api_key": [] }]),
         function(request: any, response: any, next: any) {
             const args = {
             };
@@ -55,7 +89,54 @@ export function RegisterRoutes(app: express.Express) {
             promiseHandler(controller, promise, response, next);
         });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    app.get('/v1/MerchantsCreate',
+    app.get('/v1/merchants/:drveUid',
+        authenticateMiddleware([{ "api_key": [] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                drveUid: { "in": "path", "name": "drveUid", "required": true, "dataType": "string" },
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new MerchantsController();
+
+
+            const promise = controller.getMerchant.apply(controller, validatedArgs as any);
+            promiseHandler(controller, promise, response, next);
+        });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.post('/v1/merchants',
+        authenticateMiddleware([{ "api_key": [] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                merchantInput: { "in": "body", "name": "merchantInput", "required": true, "ref": "MerchantInput" },
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new MerchantsController();
+
+
+            const promise = controller.createMerchant.apply(controller, validatedArgs as any);
+            promiseHandler(controller, promise, response, next);
+        });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.get('/v1/merchantsCreate',
         function(request: any, response: any, next: any) {
             const args = {
             };
@@ -79,6 +160,53 @@ export function RegisterRoutes(app: express.Express) {
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
+    function authenticateMiddleware(security: TsoaRoute.Security[] = []) {
+        return (request: any, _response: any, next: any) => {
+            let responded = 0;
+            let success = false;
+
+            const succeed = function(user: any) {
+                if (!success) {
+                    success = true;
+                    responded++;
+                    request['user'] = user;
+                    next();
+                }
+            }
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            const fail = function(error: any) {
+                responded++;
+                if (responded == security.length && !success) {
+                    error.status = error.status || 401;
+                    next(error)
+                }
+            }
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            for (const secMethod of security) {
+                if (Object.keys(secMethod).length > 1) {
+                    let promises: Promise<any>[] = [];
+
+                    for (const name in secMethod) {
+                        promises.push(expressAuthentication(request, name, secMethod[name]));
+                    }
+
+                    Promise.all(promises)
+                        .then((users) => { succeed(users[0]); })
+                        .catch(fail);
+                } else {
+                    for (const name in secMethod) {
+                        expressAuthentication(request, name, secMethod[name])
+                            .then(succeed)
+                            .catch(fail);
+                    }
+                }
+            }
+        }
+    }
 
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 

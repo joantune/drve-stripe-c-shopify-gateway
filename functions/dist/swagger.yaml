@@ -5,8 +5,32 @@ components:
     requestBodies: {}
     responses: {}
     schemas:
+        Status:
+            enum:
+                - Stripe_waiting
+                - Active
+                - Inactive
+                - Stripe_inactive
+            type: string
         MerchantOutput:
             properties:
+                drveUid:
+                    type: string
+                shopifyDomain:
+                    type: string
+                commissionPercentage:
+                    type: number
+                    format: double
+                enabled:
+                    type: boolean
+                name:
+                    type: string
+                chargeWebhookUrl:
+                    type: string
+                connectedAccountWebhookUrl:
+                    type: string
+                stripeOnConnectionRedirectURL:
+                    type: string
                 id:
                     type: string
                 createdAt:
@@ -15,39 +39,80 @@ components:
                 updatedAt:
                     type: string
                     format: date-time
-                drveUid:
+                status:
+                    $ref: '#/components/schemas/Status'
+                gatewayURL:
                     type: string
-                shopifyDomain:
+                gatewayAccountId:
+                    type: string
+                gatewayCredentials:
+                    type: string
+                stripeAcctId:
+                    type: string
+                stripeURLToConnectAccount:
                     type: string
                 testMode:
                     type: boolean
             required:
+                - drveUid
+                - shopifyDomain
+                - commissionPercentage
+                - enabled
+                - name
+                - chargeWebhookUrl
+                - connectedAccountWebhookUrl
+                - stripeOnConnectionRedirectURL
                 - id
                 - createdAt
                 - updatedAt
+                - status
+                - gatewayURL
+                - gatewayAccountId
+                - gatewayCredentials
+                - stripeAcctId
+                - stripeURLToConnectAccount
+                - testMode
+            type: object
+            additionalProperties: true
+        MerchantInput:
+            properties:
+                drveUid:
+                    type: string
+                shopifyDomain:
+                    type: string
+                commissionPercentage:
+                    type: number
+                    format: double
+                enabled:
+                    type: boolean
+                name:
+                    type: string
+                chargeWebhookUrl:
+                    type: string
+                connectedAccountWebhookUrl:
+                    type: string
+                stripeOnConnectionRedirectURL:
+                    type: string
+            required:
                 - drveUid
                 - shopifyDomain
-                - testMode
+                - commissionPercentage
+                - enabled
+                - name
+                - chargeWebhookUrl
+                - connectedAccountWebhookUrl
+                - stripeOnConnectionRedirectURL
             type: object
             additionalProperties: true
     securitySchemes:
         api_key:
-            type: apiKey
-            name: access_token
-            in: query
-        tsoa_auth:
-            type: oauth2
-            flows:
-                implicit:
-                    authorizationUrl: 'http://swagger.io/api/oauth/dialog'
-                    scopes:
-                        'write:pets': 'modify things'
-                        'read:pets': 'read things'
+            scheme: basic
+            type: http
 info:
     title: functions
 openapi: 3.0.0
 paths:
-    /Merchants:
+    /merchants:
         get:
             operationId: GetMerchants
             responses:
@@ -59,9 +124,50 @@ paths:
                                     $ref: '#/components/schemas/MerchantOutput'
                                 type: array
                     description: Ok
-            security: []
+            security:
+                -
+                    api_key: []
             parameters: []
-    /MerchantsCreate:
+        post:
+            operationId: CreateMerchant
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/MerchantOutput'
+                    description: Ok
+            security:
+                -
+                    api_key: []
+            parameters: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/MerchantInput'
+    '/merchants/{drveUid}':
+        get:
+            operationId: GetMerchant
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/MerchantOutput'
+                    description: Ok
+            security:
+                -
+                    api_key: []
+            parameters:
+                -
+                    in: path
+                    name: drveUid
+                    required: true
+                    schema:
+                        type: string
+    /merchantsCreate:
         get:
             operationId: CreateMerchants
             responses:

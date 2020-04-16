@@ -75,7 +75,11 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
     message: err.message || 'An error occurred during the request.',
     name: err.name,
     status,
+    //TODO add stacktrace if in development mode
   };
+  for(let header of err.headers || []) {
+    res.setHeader(header[0], header[1]);
+  }
   res.status(status).json(body);
 });
 

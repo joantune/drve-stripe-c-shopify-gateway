@@ -1,32 +1,32 @@
 import * as express from 'express';
+import {credentialsMatch} from "../conf/constants";
+
+export interface authResult {
+  testMode: boolean
+}
 
 export function expressAuthentication(req: express.Request, name: string, scopes?: string[]): Promise<any> {
   if (name === 'api_key') {
-    let token;
-    if (req.query && req.query.access_token) {
-      token = req.query.access_token;
+    if (!req.headers.authorization || req.headers.authorization.indexOf('Basic ') === -1) {
+      return Promise.reject({
+        message: 'Missing Authorization Header',
+        headers: [['WWW-Authenticate','Basic realm="DRVE Gateway Auth"']]
+      })
+    }
+    // verify auth credentials
+    const base64Credentials = req.headers.authorization.split(' ')[1];
+    const cred = Buffer.from(base64Credentials, 'base64').toString('ascii');
+    const [apiKey, apiSecret] = cred.split(':');
+    const [authenticated, testMode] = credentialsMatch(apiKey, apiSecret);
+    if (!authenticated) {
+      return Promise.reject({
+        message: 'Invalid authentication credentials'
+      })
     } else {
-      return Promise.reject({});
+      return Promise.resolve(<authResult>{testMode: testMode});
     }
 
-    if (token === 'abc123456') {
-      return Promise.resolve({
-        id: 1,
-        name: 'Ironman',
-      });
-    } else if (token === 'xyz123456') {
-      return Promise.resolve({
-        id: 2,
-        name: 'Thor',
-      });
-    } else {
-      return Promise.reject({});
-    }
-  } else {
-    if (req.query && req.query.tsoa && req.query.tsoa === 'abc123456') {
-      return Promise.resolve({});
-    } else {
-      return Promise.reject({});
-    }
+
   }
+  return Promise.reject({error: 'Not authed'});
 }
