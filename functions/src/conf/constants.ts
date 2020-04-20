@@ -23,7 +23,8 @@ export const constants = {
 
 interface apiCredentials {
   apiKey: string,
-  apiSecret: string
+  apiSecret: string,
+  webhookSecret: string
 }
 
 
@@ -33,14 +34,16 @@ interface credentialsInterface {
 }
 
 
-const credentials : credentialsInterface= {
+export const credentials : credentialsInterface= {
   live:  {
     apiKey: "129k=-asdmk123-asd2-asdancxcxv",
-    apiSecret: "lalk2109asdASDJFK@#"
+    apiSecret: "lalk2109asdASDJFK@#",
+    webhookSecret: "asdsakjh122309912038"
   },
   testing: {
     apiKey: "testing",
-    apiSecret: "apiSecret"
+    apiSecret: "apiSecret",
+    webhookSecret: "asldslakjdkj123lkj123"
   }
 }
 

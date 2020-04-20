@@ -12,6 +12,7 @@
             }
         },
         "yaml": true,
+        "version": "1-alpha",
         "specVersion": 3
     },
     "routes": {

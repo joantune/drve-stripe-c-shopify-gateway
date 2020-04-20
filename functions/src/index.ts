@@ -8,6 +8,8 @@ import * as methodOverride from 'method-override';
 import './controllers/MerchantsController';
 
 import { RegisterRoutes } from './routes/routes';
+import {PROCESSOR_BASE_PATH, processorController} from "./controllers/processorController";
+// import {processNewlyCreatedStatusMerchant} from "./services/ReportingService";
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -95,9 +97,16 @@ app.set("view engine", "handlebars");
 
 //serve static assets on dir assets
 app.use(`/${STATIC_PATH}`, express.static("assets"));
+app.use(PROCESSOR_BASE_PATH, processorController);
 
 
 exports.app = functions.runWith({
   memory: '256MB',
   timeoutSeconds: 500
 }).https.onRequest(app);
+
+
+//TODO create something that sees the write of the status instance and enqueues
+//a task - always overriding the ID of it to make sure that we have that task  created
+
+// exports.processMerchantStatusCreation = processNewlyCreatedStatusMerchant;

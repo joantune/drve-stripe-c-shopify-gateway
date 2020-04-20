@@ -5,116 +5,13 @@ components:
     requestBodies: {}
     responses: {}
     schemas:
-        Status:
+        StatusModel:
             enum:
                 - Stripe_waiting
                 - Active
                 - Inactive
                 - Stripe_inactive
             type: string
-        Partial_MerchantOutputInstance_:
-            properties:
-                chargeWebhookUrl:
-                    type: string
-                    default: ""
-                commissionPercentage:
-                    type: number
-                    format: double
-                    default: 0
-                connectedAccountWebhookUrl:
-                    type: string
-                    default: ""
-                createdAt:
-                    type: string
-                    format: date-time
-                    default: '2020-04-16T10:05:46.170Z'
-                drveUid:
-                    type: string
-                    default: ""
-                enabled:
-                    type: boolean
-                    default: false
-                gatewayAccountId:
-                    type: string
-                    default: ""
-                gatewayCredentials:
-                    type: string
-                    default: ""
-                gatewayURL:
-                    type: string
-                    default: ""
-                id:
-                    type: string
-                    default: ""
-                name:
-                    type: string
-                    default: ""
-                shopifyDomain:
-                    type: string
-                    default: ""
-                status:
-                    $ref: '#/components/schemas/Status'
-                stripeAcctId:
-                    type: string
-                    default: ""
-                stripeOnConnectionRedirectURL:
-                    type: string
-                    default: ""
-                stripeURLToConnectAccount:
-                    type: string
-                    default: ""
-                testMode:
-                    type: boolean
-                    default: true
-                updatedAt:
-                    type: string
-                    format: date-time
-                    default: '2020-04-16T10:05:46.172Z'
-            type: object
-            description: 'Make all properties in T optional'
-        Partial_MerchantOutput_:
-            properties:
-                status:
-                    $ref: '#/components/schemas/Status'
-                gatewayURL:
-                    type: string
-                gatewayAccountId:
-                    type: string
-                gatewayCredentials:
-                    type: string
-                stripeAcctId:
-                    type: string
-                stripeURLToConnectAccount:
-                    type: string
-                testMode:
-                    type: boolean
-                drveUid:
-                    type: string
-                shopifyDomain:
-                    type: string
-                commissionPercentage:
-                    type: number
-                    format: double
-                enabled:
-                    type: boolean
-                name:
-                    type: string
-                chargeWebhookUrl:
-                    type: string
-                connectedAccountWebhookUrl:
-                    type: string
-                stripeOnConnectionRedirectURL:
-                    type: string
-                id:
-                    type: string
-                createdAt:
-                    type: string
-                    format: date-time
-                updatedAt:
-                    type: string
-                    format: date-time
-            type: object
-            description: 'Make all properties in T optional'
         MerchantOutput:
             properties:
                 drveUid:
@@ -143,7 +40,7 @@ components:
                     type: string
                     format: date-time
                 status:
-                    $ref: '#/components/schemas/Status'
+                    $ref: '#/components/schemas/StatusModel'
                 gatewayURL:
                     type: string
                 gatewayAccountId:
@@ -177,6 +74,49 @@ components:
                 - testMode
             type: object
             additionalProperties: true
+        Partial_MerchantOutput_:
+            properties:
+                status:
+                    $ref: '#/components/schemas/StatusModel'
+                gatewayURL:
+                    type: string
+                gatewayAccountId:
+                    type: string
+                gatewayCredentials:
+                    type: string
+                stripeAcctId:
+                    type: string
+                stripeURLToConnectAccount:
+                    type: string
+                testMode:
+                    type: boolean
+                drveUid:
+                    type: string
+                shopifyDomain:
+                    type: string
+                commissionPercentage:
+                    type: number
+                    format: double
+                enabled:
+                    type: boolean
+                name:
+                    type: string
+                chargeWebhookUrl:
+                    type: string
+                connectedAccountWebhookUrl:
+                    type: string
+                stripeOnConnectionRedirectURL:
+                    type: string
+                id:
+                    type: string
+                createdAt:
+                    type: string
+                    format: date-time
+                updatedAt:
+                    type: string
+                    format: date-time
+            type: object
+            description: 'Make all properties in T optional'
         MerchantInput:
             properties:
                 drveUid:
@@ -213,6 +153,7 @@ components:
             type: http
 info:
     title: functions
+    version: 1-alpha
 openapi: 3.0.0
 paths:
     /merchants:
@@ -224,7 +165,7 @@ paths:
                         application/json:
                             schema:
                                 items:
-                                    $ref: '#/components/schemas/Partial_MerchantOutputInstance_'
+                                    $ref: '#/components/schemas/MerchantOutput'
                                 type: array
                     description: Ok
             security:
@@ -270,9 +211,47 @@ paths:
                     required: true
                     schema:
                         type: string
+        put:
+            operationId: EditMerchant
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/MerchantOutput'
+                    description: Ok
+            security:
+                -
+                    api_key: []
+            parameters:
+                -
+                    in: path
+                    name: drveUid
+                    required: true
+                    schema:
+                        type: string
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/MerchantInput'
     /merchantsCreate:
         get:
             operationId: CreateMerchants
+            responses:
+                '200':
+                    content:
+                        application/json:
+                            schema:
+                                additionalProperties: true
+                                type: object
+                    description: Ok
+            security: []
+            parameters: []
+    /merchantsCreate/nestedTest:
+        get:
+            operationId: CreateNestedExample
             responses:
                 '200':
                     content:

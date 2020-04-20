@@ -12,19 +12,9 @@ import * as express from 'express';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 
 const models: TsoaRoute.Models = {
-    "Status": {
+    "StatusModel": {
         "dataType": "refEnum",
         "enums": ["Stripe_waiting", "Active", "Inactive", "Stripe_inactive"],
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Partial_MerchantOutputInstance_": {
-        "dataType": "refAlias",
-        "type": { "dataType": "nestedObjectLiteral", "nestedProperties": { "chargeWebhookUrl": { "dataType": "string", "default": "" }, "commissionPercentage": { "dataType": "double", "default": 0 }, "connectedAccountWebhookUrl": { "dataType": "string", "default": "" }, "createdAt": { "dataType": "datetime", "default": "2020-04-16T10:05:48.125Z" }, "drveUid": { "dataType": "string", "default": "" }, "enabled": { "dataType": "boolean", "default": false }, "gatewayAccountId": { "dataType": "string", "default": "" }, "gatewayCredentials": { "dataType": "string", "default": "" }, "gatewayURL": { "dataType": "string", "default": "" }, "id": { "dataType": "string", "default": "" }, "name": { "dataType": "string", "default": "" }, "shopifyDomain": { "dataType": "string", "default": "" }, "status": { "ref": "Status" }, "stripeAcctId": { "dataType": "string", "default": "" }, "stripeOnConnectionRedirectURL": { "dataType": "string", "default": "" }, "stripeURLToConnectAccount": { "dataType": "string", "default": "" }, "testMode": { "dataType": "boolean", "default": true }, "updatedAt": { "dataType": "datetime", "default": "2020-04-16T10:05:48.127Z" } }, "validators": {} },
-    },
-    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-    "Partial_MerchantOutput_": {
-        "dataType": "refAlias",
-        "type": { "dataType": "nestedObjectLiteral", "nestedProperties": { "status": { "ref": "Status" }, "gatewayURL": { "dataType": "string" }, "gatewayAccountId": { "dataType": "string" }, "gatewayCredentials": { "dataType": "string" }, "stripeAcctId": { "dataType": "string" }, "stripeURLToConnectAccount": { "dataType": "string" }, "testMode": { "dataType": "boolean" }, "drveUid": { "dataType": "string" }, "shopifyDomain": { "dataType": "string" }, "commissionPercentage": { "dataType": "double" }, "enabled": { "dataType": "boolean" }, "name": { "dataType": "string" }, "chargeWebhookUrl": { "dataType": "string" }, "connectedAccountWebhookUrl": { "dataType": "string" }, "stripeOnConnectionRedirectURL": { "dataType": "string" }, "id": { "dataType": "string" }, "createdAt": { "dataType": "datetime" }, "updatedAt": { "dataType": "datetime" } }, "validators": {} },
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "MerchantOutput": {
@@ -41,7 +31,7 @@ const models: TsoaRoute.Models = {
             "id": { "dataType": "string", "required": true },
             "createdAt": { "dataType": "datetime", "required": true },
             "updatedAt": { "dataType": "datetime", "required": true },
-            "status": { "ref": "Status", "required": true },
+            "status": { "ref": "StatusModel", "required": true },
             "gatewayURL": { "dataType": "string", "required": true },
             "gatewayAccountId": { "dataType": "string", "required": true },
             "gatewayCredentials": { "dataType": "string", "required": true },
@@ -50,6 +40,11 @@ const models: TsoaRoute.Models = {
             "testMode": { "dataType": "boolean", "required": true },
         },
         "additionalProperties": true,
+    },
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    "Partial_MerchantOutput_": {
+        "dataType": "refAlias",
+        "type": { "dataType": "nestedObjectLiteral", "nestedProperties": { "status": { "ref": "StatusModel" }, "gatewayURL": { "dataType": "string" }, "gatewayAccountId": { "dataType": "string" }, "gatewayCredentials": { "dataType": "string" }, "stripeAcctId": { "dataType": "string" }, "stripeURLToConnectAccount": { "dataType": "string" }, "testMode": { "dataType": "boolean" }, "drveUid": { "dataType": "string" }, "shopifyDomain": { "dataType": "string" }, "commissionPercentage": { "dataType": "double" }, "enabled": { "dataType": "boolean" }, "name": { "dataType": "string" }, "chargeWebhookUrl": { "dataType": "string" }, "connectedAccountWebhookUrl": { "dataType": "string" }, "stripeOnConnectionRedirectURL": { "dataType": "string" }, "id": { "dataType": "string" }, "createdAt": { "dataType": "datetime" }, "updatedAt": { "dataType": "datetime" } }, "validators": {} },
     },
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     "MerchantInput": {
@@ -148,6 +143,31 @@ export function RegisterRoutes(app: express.Express) {
             promiseHandler(controller, promise, response, next);
         });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.put('/v1/merchants/:drveUid',
+        authenticateMiddleware([{ "api_key": [] }]),
+        function(request: any, response: any, next: any) {
+            const args = {
+                merchantInput: { "in": "body", "name": "merchantInput", "required": true, "ref": "MerchantInput" },
+                drveUid: { "in": "path", "name": "drveUid", "required": true, "dataType": "string" },
+                req: { "in": "request", "name": "req", "required": true, "dataType": "object" },
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new MerchantsController();
+
+
+            const promise = controller.editMerchant.apply(controller, validatedArgs as any);
+            promiseHandler(controller, promise, response, next);
+        });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
     app.get('/v1/merchantsCreate',
         function(request: any, response: any, next: any) {
             const args = {
@@ -166,6 +186,27 @@ export function RegisterRoutes(app: express.Express) {
 
 
             const promise = controller.createMerchants.apply(controller, validatedArgs as any);
+            promiseHandler(controller, promise, response, next);
+        });
+    // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+    app.get('/v1/merchantsCreate/nestedTest',
+        function(request: any, response: any, next: any) {
+            const args = {
+            };
+
+            // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+            let validatedArgs: any[] = [];
+            try {
+                validatedArgs = getValidatedArgs(args, request);
+            } catch (err) {
+                return next(err);
+            }
+
+            const controller = new MerchantsCreateController();
+
+
+            const promise = controller.createNestedExample.apply(controller, validatedArgs as any);
             promiseHandler(controller, promise, response, next);
         });
     // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
