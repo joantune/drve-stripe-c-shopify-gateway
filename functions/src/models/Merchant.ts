@@ -5,8 +5,10 @@ import {getRepository} from "../conf/database";
 import * as _ from 'lodash';
 import {ReportableEntity} from "./ReportableEntity";
 import {ReportingService} from "../services/ReportingService";
-
-// import * as uuid from 'uuid';
+import {constants} from "../conf/constants";
+const Hashids = require('hashids/cjs');
+import { v4 as uuidv4 } from 'uuid';
+import * as randomstring from 'randomstring';
 
 export enum StatusModel {
   Stripe_waiting = "Stripe_waiting", //Stripe_waiting (waiting activation from Stripe) [enabled = false]
@@ -237,6 +239,7 @@ export class MerchantInstance extends AbstractDatedEntityImp implements Merchant
 
 }
 
+const hashids = new Hashids(constants.hashidsSalt);
 
 export class MerchantService {
   public static getRepository() {
@@ -251,6 +254,14 @@ export class MerchantService {
     instance.testMode = testMode;
     instance._enabled = enabledValue;
     instance = await MerchantService.getRepository().create(instance);
+    instance.gatewayURL = constants.gatewayUrl;
+    instance.gatewayAccountId =
+        `${hashids.encodeHex(Buffer.from(instance.id).toString('hex'))}-${uuidv4()}`;
+    instance.gatewayCredentials = randomstring.generate();
+
+    // gatewayURL: string;
+    // gatewayAccountId: string;
+    // gatewayCredentials: string
     //at the beginning - Stripe can't be active
     await instance.addStatus(StatusModel.Stripe_waiting, AuthorativeEntity.Stripe, "Merchant initial status");
     return instance;

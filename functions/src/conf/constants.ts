@@ -18,7 +18,9 @@ export const constants = {
   defaultRequestHost: functions.config().default.req_host,
   functionLocation: 'us-central1',
   jwtSecret: process.env.JWT_SECRET || "asdkjlas jlkjkalsdjkljk lsjklsdaj l!@#ASD askjhd ASD k;SDVAFBCVNMS",
-  production: process.env.PRODUCTION || false
+  production: process.env.PRODUCTION || false,
+  gatewayUrl: "https://www.shopify.com/login?redirect=%2Fadmin%2Fauthorize_gateway%2F1055211",
+  hashidsSalt: "aslpo2j asome random saltalis jlasjdlkajsdlk ja"
 };
 
 interface apiCredentials {
